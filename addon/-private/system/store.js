@@ -2724,6 +2724,16 @@ function _commit(adapter, store, operation, snapshot) {
       if (adapterPayload) {
         payload = normalizeResponseHelper(serializer, store, modelClass, adapterPayload, snapshot.id, operation);
         if (payload.included) {
+          // first find possibly uncommitted records from this inclusion
+          var types = payload.included.map(function (record) { return record.type; });
+          types.forEach(function (type) {
+            var existingRecords = store.peekAll(type);
+            var uncommitted = existingRecords.filter(function (record) {
+              return record.get('id') === 'embedded';
+            });
+            // and remove them
+            uncommitted.invoke('unloadRecord');
+          });
           store._push({ data: null, included: payload.included });
         }
         data = payload.data;
