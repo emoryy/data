@@ -1,6 +1,6 @@
 {
   "ds-improved-ajax": true,
-  "ds-pushpayload-return": false,
+  "ds-pushpayload-return": true,
   "ds-extended-errors": false,
   "ds-overhaul-references": false,
   "ds-payload-type-hooks": false,
